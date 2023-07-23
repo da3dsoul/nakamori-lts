@@ -378,7 +378,7 @@ def can_user_connect():
                 return False
             eh.exception(ErrorPriority.NORMAL)
         # but since no one has it, we can't count on it actually working, so fall back
-        from lib.shoko_models.v2 import Filter
+        from lib.shoko.v2 import Filter
         f = Filter(0, build_full_object=True, get_children=False)
         if f.size < 1:
             raise RuntimeError(localized(30256))

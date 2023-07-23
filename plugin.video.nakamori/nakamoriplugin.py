@@ -52,7 +52,7 @@ def finish_menu():
 @routing_plugin.route('/')
 @try_function(ErrorPriority.BLOCKING)
 def show_main_menu():
-    from lib.shoko_models.v2 import Filter
+    from lib.shoko.v2 import Filter
     f = Filter(0, build_full_object=True)
     plugin_dir.set_content('tvshows')
     items = []
@@ -95,7 +95,7 @@ def add_extra_main_menu_items(items):
     :param items:
     :return:
     """
-    from lib.shoko_models.v2 import CustomItem
+    from lib.shoko.v2 import CustomItem
     # { 'Seasons': 2, 'Years': 3, 'Tags': 4,
     # 'Unsort': 5, 'Settings' (both): 7, 'Shoko Menu': 8, 'Search': 9, Experiment: 99}
 
@@ -114,7 +114,7 @@ def add_extra_main_menu_items(items):
 @routing_plugin.route('/menu/filter/<filter_id>/')
 @try_function(ErrorPriority.BLOCKING, except_func=fail_menu)
 def show_filter_menu(filter_id):
-    from lib.shoko_models.v2 import Filter
+    from lib.shoko.v2 import Filter
     f = Filter(filter_id, build_full_object=True, get_children=True)
     plugin_dir.set_content('tvshows')
     plugin_dir.set_cached()
@@ -129,7 +129,7 @@ def show_filter_menu(filter_id):
 @routing_plugin.route('/menu/group/<group_id>/filterby/<filter_id>/')
 @try_function(ErrorPriority.BLOCKING, except_func=fail_menu)
 def show_group_menu(group_id, filter_id):
-    from lib.shoko_models.v2 import Group
+    from lib.shoko.v2 import Group
     group = Group(group_id, build_full_object=True, get_children=True, filter_id=filter_id)
     plugin_dir.set_content('tvshows')
     group.add_sort_methods(routing_plugin.handle)
@@ -143,7 +143,7 @@ def show_group_menu(group_id, filter_id):
 @routing_plugin.route('/menu/series/<series_id>/')
 @try_function(ErrorPriority.BLOCKING, except_func=fail_menu)
 def show_series_menu(series_id):
-    from lib.shoko_models.v2 import Series
+    from lib.shoko.v2 import Series
     series = Series(series_id, build_full_object=True, get_children=True)
 
     if len(series.episode_types) > 1:
@@ -161,7 +161,7 @@ def show_series_menu(series_id):
 @routing_plugin.route('/menu/series/<series_id>/type/<episode_type>/')
 @try_function(ErrorPriority.BLOCKING, except_func=fail_menu)
 def show_series_episode_types_menu(series_id, episode_type):
-    from lib.shoko_models.v2 import SeriesTypeList
+    from lib.shoko.v2 import SeriesTypeList
     types = SeriesTypeList(series_id, episode_type, get_children=True)
     add_episodes(types, episode_type)
 
@@ -200,7 +200,7 @@ def add_episodes(series, episode_type):
 def add_continue_item(series, episode_type, watched_index):
     if plugin_addon.getSetting('show_continue') != 'true':
         return
-    from lib.shoko_models.v2 import CustomItem
+    from lib.shoko.v2 import CustomItem
     continue_url = script(script_utils.url_move_to_item(watched_index))
 
     continue_text = plugin_localize(30053)
@@ -229,7 +229,7 @@ def add_continue_item(series, episode_type, watched_index):
 @try_function(ErrorPriority.BLOCKING, except_func=fail_menu)
 def show_unsorted_menu():
     # this is really bad practice, but the unsorted files list is too special
-    from lib.shoko_models.v2 import File
+    from lib.shoko.v2 import File
     url = server + '/api/file/unsort'
     json_body = pyproxy.get_json(url)
     json_node = json.loads(json_body)
@@ -247,7 +247,7 @@ def show_search_menu():
     # search for new
     # quick search
     # clear search in context_menu
-    from lib.shoko_models.v2 import CustomItem
+    from lib.shoko.v2 import CustomItem
     plugin_dir.set_content('videos')
 
     clear_items = (plugin_localize(30110), script_utils.url_clear_search_terms())
@@ -322,7 +322,7 @@ def show_search_result_menu(query):
         return
 
     plugin_dir.set_content('tvshows')
-    from lib.shoko_models.v2 import Group, Series
+    from lib.shoko.v2 import Group, Series
     Group(0).add_sort_methods(routing_plugin.handle)
     for item in groups.get('series', []):
         series = Series(item, build_full_object=True, get_children=True)
@@ -335,7 +335,7 @@ def play_video_internal(ep_id, file_id, mark_as_watched=True, resume=False):
     fail_menu()
 
     if ep_id > 0 and file_id == 0:
-        from lib.shoko_models.v2 import Episode
+        from lib.shoko.v2 import Episode
         ep = Episode(ep_id, build_full_object=True)
         # follow pick_file setting
         if plugin_addon.getSetting('pick_file') == 'true':

@@ -132,7 +132,7 @@ def show_episode_vote_dialog(ep_id):
 @script.route('/series/<series_id>/vote')
 @try_function(ErrorPriority.BLOCKING)
 def vote_for_series(series_id):
-    from lib.shoko_models.v2 import Series
+    from lib.shoko.v2 import Series
     series = Series(series_id)
     suggest_rating = ''
     if plugin_addon.getSetting('suggest_series_vote') == 'true':
@@ -155,7 +155,7 @@ def vote_for_series(series_id):
 @script.route('/episode/<ep_id>/vote')
 @try_function(ErrorPriority.BLOCKING)
 def vote_for_episode(ep_id):
-    from lib.shoko_models.v2 import Episode
+    from lib.shoko.v2 import Episode
     vote_list = ['Don\'t Vote', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']
     my_vote = xbmcgui.Dialog().select(plugin_addon.getLocalizedString(30023), vote_list)
     if my_vote < 1:
@@ -178,7 +178,7 @@ def vote_for_tvshows(vote_type):
 @script.route('/ep/<ep_id>/file_list')
 @try_function(ErrorPriority.BLOCKING)
 def file_list(ep_id):
-    from lib.shoko_models.v2 import Episode
+    from lib.shoko.v2 import Episode
     ep = Episode(ep_id, build_full_object=True)
     items = [(x.name, x.id) for x in ep]
     selected_id = kodi_utils.show_file_list(items)
@@ -188,7 +188,7 @@ def file_list(ep_id):
 @script.route('/file/<file_id>/rescan')
 @try_function(ErrorPriority.BLOCKING)
 def rescan_file(file_id):
-    from lib.shoko_models.v2 import File
+    from lib.shoko.v2 import File
     f = File(file_id)
     f.rescan()
 
@@ -196,7 +196,7 @@ def rescan_file(file_id):
 @script.route('/file/<file_id>/rehash')
 @try_function(ErrorPriority.BLOCKING)
 def rehash_file(file_id):
-    from lib.shoko_models.v2 import File
+    from lib.shoko.v2 import File
     f = File(file_id)
     f.rehash()
 
@@ -204,7 +204,7 @@ def rehash_file(file_id):
 @script.route('/episode/<ep_id>/set_watched/<watched>')
 @try_function(ErrorPriority.HIGH, 'Error Setting Watched Status')
 def set_episode_watched_status(ep_id, watched):
-    from lib.shoko_models.v2 import Episode
+    from lib.shoko.v2 import Episode
     ep = Episode(ep_id)
     ep.set_watched_status(watched)
     kodi_utils.refresh()
@@ -213,7 +213,7 @@ def set_episode_watched_status(ep_id, watched):
 @script.route('/series/<series_id>/set_watched/<watched>')
 @try_function(ErrorPriority.HIGH, 'Error Setting Watched Status')
 def set_series_watched_status(series_id, watched):
-    from lib.shoko_models.v2 import Series
+    from lib.shoko.v2 import Series
     series = Series(series_id)
     series.set_watched_status(watched)
     kodi_utils.refresh()
@@ -221,7 +221,7 @@ def set_series_watched_status(series_id, watched):
 
 @script.route('/group/<group_id>/set_watched/<watched>')
 def set_group_watched_status(group_id, watched):
-    from lib.shoko_models.v2 import Group
+    from lib.shoko.v2 import Group
     group = Group(group_id)
     group.set_watched_status(watched)
     kodi_utils.refresh()

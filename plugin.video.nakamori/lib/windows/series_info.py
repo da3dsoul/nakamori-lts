@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import xbmcgui
-from lib.shoko_models import v2 as model
+from lib.shoko import v2 as model
 from lib.nakamori_utils.globalvars import *
 
 ADDON = xbmcaddon.Addon('plugin.video.nakamori')

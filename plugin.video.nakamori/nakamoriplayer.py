@@ -42,14 +42,14 @@ def finished_episode(ep_id, file_id, current_time, total_time):
             script_utils.vote_for_episode(ep_id)
 
         if ep_id != 0:
-            from lib.shoko_models.v2 import Episode
+            from lib.shoko.v2 import Episode
             ep = Episode(ep_id, build_full_object=False)
             spam('mark as watched, episode')
             ep.set_watched_status(True)
 
             # vote on finished series
             if plugin_addon.getSetting('vote_on_series') == 'true':
-                from lib.shoko_models.v2 import get_series_for_episode
+                from lib.shoko.v2 import get_series_for_episode
                 series = get_series_for_episode(ep_id)
                 # voting should be only when you really watch full series
                 spam('vote_on_series, mark: %s / %s' % (series.sizes.watched_episodes, series.sizes.total_episodes))
@@ -74,7 +74,7 @@ def play_video(file_id, ep_id=0, mark_as_watched=True, resume=False, episode=Non
     :return: True if successfully playing
     """
 
-    from lib.shoko_models.v2 import Episode, File, get_series_for_episode
+    from lib.shoko.v2 import Episode, File, get_series_for_episode
 
     # check if we're already playing something
     try:
@@ -282,7 +282,7 @@ class Player(xbmc.Player):
             return
         try:
             if self.time > 10:
-                from lib.shoko_models.v2 import File
+                from lib.shoko.v2 import File
                 f = File(self.file_id)
                 f.set_resume_time(kodi_proxy.duration_from_kodi(self.time))
         except:
